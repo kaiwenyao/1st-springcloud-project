@@ -1,2 +1,9 @@
 .idea
 logs
+**/target/
+
+*.log
+
+.mvn/
+mvnw
+mvnw.cmd
