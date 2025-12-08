@@ -49,6 +49,7 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
             // response status code 401
             ServerHttpResponse response = exchange.getResponse();
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
+            System.out.println("没登录啊老弟");
             return response.setComplete();
         }
 
