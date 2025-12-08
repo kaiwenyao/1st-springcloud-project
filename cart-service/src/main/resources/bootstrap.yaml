@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: cart-service
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      server-addr: 10.8.0.7:8848
+      config:
+        file-extension: yaml
+        shared-configs:
+          - data-id: shared-jdbc.yaml
+          - data-id: shared-log.yaml
+          - data-id: shared-swagger.yaml
+    inetutils:
+      # 忽略 en0 这种物理网卡常用的网卡名 (可选，作为双重保险)
+      ignored-interfaces:
+        - en0
+      # 强制首选 10.8.0 开头的 IP
+      preferred-networks:
+        - 10.8.0
