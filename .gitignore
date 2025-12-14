@@ -1,7 +1,7 @@
 .idea
 logs
 **/target/
-
+.DS_Store
 *.log
 
 .mvn/

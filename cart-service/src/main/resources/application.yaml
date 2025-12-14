@@ -1,14 +1,27 @@
 server:
   port: 8082
-
+#  tomcat:
+#    threads:
+#      max: 25
+#    accept-count: 25
+#    max-connections: 100
 feign:
   okhttp:
     enabled: true # 开启OKHttp功能
+  sentinel:
+    enabled: true
 
 hm:
   db:
     database: hm-cart
   swager:
     title: "黑马商城购物车服务接口文档"
-    package: com.hmall.cart.controller
 
+
+    package: com.hmall.cart.controller
+spring:
+  cloud:
+    sentinel:
+      transport:
+        dashboard: localhost:8858
+      http-method-specify: true

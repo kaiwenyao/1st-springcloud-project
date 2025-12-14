@@ -20,6 +20,7 @@ spring:
       # 强制首选 10.8.0 开头的 IP
       preferred-networks:
         - 10.8.0
+
 mybatis-plus:
   configuration:
     default-enum-type-handler: com.baomidou.mybatisplus.core.handlers.MybatisEnumTypeHandler
