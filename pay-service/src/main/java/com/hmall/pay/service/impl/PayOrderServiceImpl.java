@@ -15,6 +15,9 @@ import com.hmall.pay.enums.PayStatus;
 import com.hmall.pay.mapper.PayOrderMapper;
 import com.hmall.pay.service.IPayOrderService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +31,7 @@ import java.time.LocalDateTime;
  * @author 虎哥
  * @since 2023-05-16
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrder> implements IPayOrderService {
@@ -37,7 +41,7 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrder> i
     private final UserClient userClient;
 //    private final IOrderService orderService;
     private final TradeClient tradeClient;
-
+    private final RabbitTemplate rabbitTemplate;
     @Override
     public String applyPayOrder(PayApplyDTO applyDTO) {
         // 1.幂等性校验
@@ -69,8 +73,17 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrder> i
 //        order.setStatus(2);
 //        order.setPayTime(LocalDateTime.now());
 //        orderService.updateById(order);
-        tradeClient.markOrderPaySuccess(po.getId());
+
+
+//        tradeClient.markOrderPaySuccess(po.getId());
+        try {
+            rabbitTemplate.convertAndSend("pay.direct", "pay.success", po.getBizOrderNo());
+        } catch (Exception e) {
+            log.error("发送支付状态通知失败, order id: {}", po.getBizOrderNo(), e);
+            throw new RuntimeException(e);
+        }
     }
+
 
     public boolean markPayOrderSuccess(Long id, LocalDateTime successTime) {
         return lambdaUpdate()
