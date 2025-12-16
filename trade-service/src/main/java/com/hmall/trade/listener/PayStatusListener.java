@@ -19,8 +19,6 @@ public class PayStatusListener {
             exchange = @Exchange(name = "pay.direct"),
             key = "pay.success"
     ))
-
-
     public void listenPaySuccess(Long orderId) {
         // 查询订单 判断订单状态是否为未支付
 
